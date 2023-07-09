@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/test.css?{% now " U" %}">
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <form action="" method="post">
+                {% csrf_token %}
+            <div class="top_left">
+                <a href=""></a>
+            </div>
+            <div class="title">
+               <button class="tleft">SIGN IN</button>
+               <a href="signup/" class="trit">SIGN UP</a>
+            
+            </div>
+            <input type="text" placeholder="Enter Email id" name="username" id="email">
+            <input type="password" placeholder="Enter password" name="pass" id="">
+            <a class="al" href="">Don't have an account</a>
+            <div class="rightbtn">
+                <div class="signupbtn">
+                    <img src="/static/assets/images/arrow.png" alt="">
+            <input id="signbtn" type="submit" value="SIGN IN">
+                </div>
+                
+            </div>
+            
+            </form>
+        </div>
+    </div>
+</body>
+</html>

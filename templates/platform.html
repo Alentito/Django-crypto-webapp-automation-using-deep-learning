@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css?{% now " U" %}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/jquery.js"></script>
+</head>
+
+<body>
+
+
+
+
+    <div class="container">
+        <div class="left">
+            <div class="left_title">
+                <img src="/static/assets/images/light/l7.png" alt="">
+                <div class="title">Cryptocurrency</div>
+            </div>
+            <div class="left_contain">
+
+
+
+                <button class="menu_1 tab" data-category="stat">
+
+                    <img src="/static/assets/images/light/l1.png" alt="">
+                    <h1>Statistics</h1>
+                </button>
+                <button class="menu_2 tab" data-category="wallet">
+                    <img src="/static/assets/images/light/l2.png" alt="">
+                    <h1>Wallet</h1>
+                </button>
+                <button class="menu_3 tab" data-category="data">
+                    <img src="/static/assets/images/light/l3.png" alt="">
+                    <h1>Data</h1>
+                </button>
+                <button class="menu_4 tab" data-category="auto">
+                    <img src="/static/assets/images/light/l4.png" alt="">
+                    <h1>Automate</h1>
+                </button>
+
+
+                <div class="menu_5">
+                    <img src="/static/assets/images/light/l5.png" alt="">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+                <div class="menu_6">
+                    <img src="/static/assets/images/light/l6.png" alt="">
+                    <h1>Award Center</h1>
+                </div>
+                <div class="menu_7">
+                    <img src="/static/assets/images/light/l7.png" alt="">
+                    <h1>Settings</h1>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="stat card" data-category="stat">
+            <div class="top">
+                <div class="top_title">Statistics</div>
+                <div class="top_right">
+                    <div class="profile">
+                        <img src="/static/assets/images/light/l5.png" alt="">
+                        <div class="name">
+
+                            hi, {{ user.username }}
+
+                        </div>
+
+                    </div>
+                    <div class="mode">
+                        <label for="chck">
+                            <input id="chck" type='checkbox'>
+                            <span class='sliders'></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mid">
+                <div class="mid_top">
+                    <div class="box1">
+                        <div class="coin">
+                            <h1>Bitcoin</h1>
+                            <img src="/static/assets/images/bit.png" alt="">
+                        </div>
+                        <!--- 
+                            we will only working with bitcoin
+                             only bitcoin value will be fetched from the database
+                            -->
+                        <div class="value">
+                            <h2 id="dynamic-value"></h2>
+                        </div>
+                    </div>
+                    <div class="box2">
+                        <div class="coin">
+                            <h1>Ethereum</h1>
+                            <img src="/static/assets/images/eth.png" alt="">
+                        </div>
+                        <div class="value">
+                            <h2>$3033.00</h2>
+                        </div>
+                    </div>
+                    <div class="box3">
+                        <div class="coin">
+                            <h1>Dogecoin</h1>
+                            <img src="/static/assets/images/dog.png" alt="">
+                        </div>
+                        <div class="value">
+                            <h2>$3033.00</h2>
+                        </div>
+                    </div>
+                    <div class="box4">
+                        <div class="coin">
+                            <h1>Shiba</h1>
+                            <img src="/static/assets/images/shi.png" alt="">
+                        </div>
+                        <div class="value">
+                            <h2>$3033.00</h2>
+                        </div>
+                    </div>
+                    <div class="box5">
+                        <div class="coin">
+                            <h1>BNB</h1>
+                            <img src="/static/assets/images/bnb.png" alt="">
+                        </div>
+                        <div class="value">
+                            <h2>$3033.00</h2>
+                        </div>
+                    </div>
+                </div>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                        {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="mid_bar">
+                    <img src="/static/assets/images/bar.png" alt="">
+                </div>
+                <div class="mid_left">
+                    <form class="form" method="post" action="{% url 'platform_coin' %}">
+                        {% csrf_token %}
+                        <h1>Buy BTC Sell BNB</h1>
+                        <h2>Price</h2>
+                        <input id="inr" name="inr" placeholder="INR" type="number">
+                        <h2>Amount</h2>
+                        <input id="amount" name="coin" placeholder="BTC" type="text">
+
+                        <!--<h2>0%</h2>-->
+                        <h2>Buy Bitcoin</h2>
+                        <input id="btc_buy" type="submit" value="BUY">
+                    </form>
+
+
+
+
+
+
+                    <script>
+
+
+
+                        const inrInput = document.getElementById("inr");
+                        const amountInput = document.getElementById("amount");
+                        
+
+                        // Function to update the amount value based on inrInput and bitcoin price
+                        function updateAmount(data) {
+                            const inrValue = parseInt(inrInput.value);
+                            const inrbit = 1 / data.Close;
+                            const calculatedAmount = inrValue * inrbit;
+
+                            if (inrInput.value =='' )
+                             {
+                              amountInput.value = "BTC"
+                             }
+                            // Set the calculated amount in the amountInput field
+                            else
+                             {
+                              amountInput.value = calculatedAmount;
+                              }
+
+                        }
+
+                        function fetchDat() {
+                            $.ajax({
+                                url: '/price/',  // Replace '/data_endpoint/' with your Django endpoint URL
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    updateAmount(data);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error:', error);
+                                }
+                            });
+                        }
+
+                        // Update the amount on page load
+                        fetchDat();
+
+                        // Fetch and update the amount every 5 seconds
+                        setInterval(fetchDat, 1000);
+
+                        // Listen for changes in the inrInput field
+                        inrInput.addEventListener("input", updateAmount);
+
+
+
+
+                    </script>
+                </div>
+                <div class="mid_mid">
+                    <div class="mid_mtop">
+                        <h1>BTC/USD</h1>
+                        <canvas id="chart" class="chart"></canvas>
+                    </div>
+                    <div class="mid_mbtm">
+                        <h1>Transaction</h1>
+                        <table id="tran">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Purchase Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+                        <script>
+                            // Fetch JSON data from the server
+                            fetch('/transaction_table_view/')
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Get a reference to the table body
+                                    const tableBody = document.querySelector('#tran tbody');
+
+                                    // Get the latest two data entries
+                                    const latestData = data.slice(-2);
+
+                                    // Iterate over the latest data and create table rows
+                                    latestData.forEach(item => {
+                                        const row = document.createElement('tr');
+
+                                        // Create table cells for the desired data fields
+                                        const nameCell = document.createElement('td');
+                                        nameCell.textContent = item.coin_name;
+                                        row.appendChild(nameCell);
+
+                                        const quantityCell = document.createElement('td');
+                                        quantityCell.textContent = item.quantity;
+                                        row.appendChild(quantityCell);
+
+                                        const dateCell = document.createElement('td');
+                                        dateCell.textContent = item.purchase_date;
+                                        row.appendChild(dateCell);
+
+
+                                        // Append the row to the table body
+                                        tableBody.appendChild(row);
+                                    });
+                                });
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wallet card" data-category="wallet">
+            <div class="top">
+                <div class="top_title">Wallet</div>
+                <div class="top_right">
+                    <div class="profile">
+                        <img src="/static/assets/images/light/l5.png" alt="">
+                        <div class="name">
+
+                            hi, {{ user.username }}
+
+                        </div>
+
+                    </div>
+                    <div class="mode">
+                        <label for="chck">
+                            <input id="chck" type='checkbox'>
+                            <span class='sliders'></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="mid">
+                <div class="mid_top">
+                    <div class="mid_top_left">
+                        <h1>Portfolio</h1>
+                        <div class="balance">
+                            <h2>Balance</h2>
+                            <img src="/static/assets/images/dot.png" alt="">
+                            <h2 id="user_balance" class="bal"></h2>
+                        </div>
+                    </div>
+                    <div class="mid_top_right">
+                        <h1>Assets</h1>
+                        <div class="asset">
+                            <div class="ass1">
+                                <h1 id="bitcoin_value" class="bitp"></h1>
+                                <img class="dot" src="/static/assets/images/dot.png" alt="">
+                                <h2 id="bitrs" class="dolb"></h2>
+                                <img class="biti" src="/static/assets/images/bit.png" alt="" class="coin">
+                                <h2 class="inc">+22%</h2>
+                            </div>
+                            <div class="ass2">
+                                <h1 class="bitp">123 BTC</h1>
+                                <img class="dot" src="/static/assets/images/dot.png" alt="">
+                                <h2 class="dolb">$23355</h2>
+                                <img class="biti" src="/static/assets/images/eth.png" alt="" class="coin">
+                                <h2 class="inc">+22%</h2>
+                            </div>
+                            <div class="ass3">
+                                <h1 class="bitp">123 BTC</h1>
+                                <img class="dot" src="/static/assets/images/dot.png" alt="">
+                                <h2 class="dolb">$23355</h2>
+                                <img class="biti" src="/static/assets/images/bnb.png" alt="" class="coin">
+                                <h2 class="inc">+22%</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mid_bottom">
+                    <div class="leftw">
+                        <h1>Market is down 21%</h1>
+                        <div class="tbcon">
+
+                            <table id="transaction-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Purchase Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <script>
+                        // Fetch JSON data from the server
+                        fetch('/transaction_table_view/')
+                            .then(response => response.json())
+                            .then(data => {
+                                // Get a reference to the table body
+                                const tableBody = document.querySelector('#transaction-table tbody');
+
+                                // Iterate over the data and create table rows
+                                data.forEach(item => {
+                                    const row = document.createElement('tr');
+
+                                    // Create table cells for each data field
+                                    const nameCell = document.createElement('td');
+                                    nameCell.textContent = item.coin_name;
+                                    row.appendChild(nameCell);
+
+                                    const quantityCell = document.createElement('td');
+                                    quantityCell.textContent = item.quantity;
+                                    row.appendChild(quantityCell);
+
+                                    const dateCell = document.createElement('td');
+                                    dateCell.textContent = item.purchase_date;
+                                    row.appendChild(dateCell);
+
+                                    // Append the row to the table body
+                                    tableBody.appendChild(row);
+                                });
+                            });
+                    </script>
+
+                    <div class="rightw">
+                        <form action="{% url 'add_cash' %}" method="post">
+                            {% csrf_token %}
+                            <input id="cash" type="number" name="cash">
+                            <input id="cash_btn" type="submit" value="Add Money">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data card" data-category="data">
+            <div class="top">
+                <div class="top_title">Historic Data</div>
+                <div class="top_right">
+                    <div class="profile">
+                        <img src="/static/assets/images/light/l5.png" alt="">
+                        <div class="name">
+
+                            hi, {{ user.username }}
+
+                        </div>
+
+                    </div>
+                    <div class="mode">
+                        <label for="chck">
+                            <input id="chck" type='checkbox'>
+                            <span class='sliders'></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mid">
+                <table id="dataset_view">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Open</th>
+                            <th>Close</th>
+
+                            <th>Marketcap</th>
+                            <th>Volume</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <script>
+                    // Fetch JSON data from the server
+                    fetch('/dataset_view/')
+                        .then(response => response.json())
+                        .then(data => {
+                            // Get a reference to the table body
+                            const tableBody = document.querySelector('#dataset_view tbody');
+
+                            // Get the latest two data entries
+                            const latestData = data.slice(-100);
+
+                            // Iterate over the latest data and create table rows
+                            latestData.forEach(item => {
+                                const row = document.createElement('tr');
+
+                                // Create table cells for the desired data fields
+                                const nameCell = document.createElement('td');
+                                nameCell.textContent = item.Date;
+                                row.appendChild(nameCell);
+
+                                const quantityCell = document.createElement('td');
+                                quantityCell.textContent = item.Open;
+                                row.appendChild(quantityCell);
+
+                                const closeCell = document.createElement('td');
+                                closeCell.textContent = item.Close;
+                                row.appendChild(closeCell);
+
+
+                                const marCell = document.createElement('td');
+                                marCell.textContent = item.Marketcap;
+                                row.appendChild(marCell);
+
+                                const volCell = document.createElement('td');
+                                volCell.textContent = item.Volume;
+                                row.appendChild(volCell);
+
+
+
+                                // Append the row to the table body
+                                tableBody.appendChild(row);
+                            });
+                        });
+                </script>
+            </div>
+
+
+
+        </div>
+        <div class="auto card" data-category="auto">
+            <div class="top">
+                <div class="top_title">Automate</div>
+                <div class="top_right">
+                    <div class="profile">
+                        <img src="/static/assets/images/light/l5.png" alt="">
+                        <div class="name">
+
+                            hi, {{ user.username }}
+
+                        </div>
+
+                    </div>
+                    <div class="mode">
+                        <label for="chck">
+                            <input id="chck" type='checkbox'>
+                            <span class='sliders'></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mid">
+                <div class="mid_left_a">
+                    <div class="mid_left_lefta">
+                        <h1>Prediction</h1>
+                        <h3>By LSTM model</h3>
+                        <div class="pred_price"></div>
+                        <h1>Model</h1>
+                        <h3>Choose your's</h3>
+                        <div class="model">
+                            <h1>ML MODELS</h1>
+                            <form action="">
+                                <input type="" name="" id="">
+                                <input type="text">
+                                <input class="btn" type="submit" value="Apply Model">
+                            </form>
+                        </div>
+                    </div>
+                    <img class="int2" src="/static/assets/images/int2.png" alt="">
+                    <div class="mid_left_righta">
+                        <h1>Setings</h1>
+                        <h3>Configure your way</h3>
+                        <div data-category="buy" class="setting buy">
+                            <button class="set" data-category="buy" id="buyb">Buy</button>
+                            <button class="set" data-category="sell" id="sellb">Sell</button>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <h1>settings</h1>
+                                
+                               <h2>Margin</h2> 
+                               <input id="margin" type="text">
+                               <h2>period</h2> 
+                               <input class="from" type="text"> <h3>to</h3> <input class="to" type="text">
+                               <h2>Repeat</h2> 
+                               <input id="repeat" type="text">
+                               <h2>Amount</h2>
+                                <input id="amount" type="text">
+                               <input class="submit" type="submit" value="Automate Buy">
+                            </form>
+                        </div>
+                        <div data-category="sell" class="setting sell">
+                            <button class="set" data-category="buy" id="buys">Buy</button>
+                            <button class="set" data-category="sell" id="sells">Sell</button>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <h1>settings</h1>
+                               
+                               <h2>BTC</h2>
+                                <input id="margin" type="text">
+                               <h2>Value</h2> 
+                               <input id="value" type="text">
+                               <h2>Margin</h2>
+                                <input id="repeat" type="text">
+                               <h2>Repeat</h2> 
+                               <input id="amount" type="text">
+                               <input class="submit" type="submit" value="Automate Sell">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mid_right_a">
+                    <h1>Monitor</h1>
+                    <h3>Live updates</h3>
+                    <div class="box1"></div>
+                    <img src="/static/assets/images/int3.png" alt="">
+                    <div class="box2"></div>
+                    <img class="int3" src="/static/assets/images/int3.png" alt="">
+                    <div class="box3"></div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <script>
+            const buttons = document.querySelectorAll('.tab');
+            const cards = document.querySelectorAll('.card');
+            //const car = document.querySelectorAll('.stat');
+
+
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    //button.classList.add('clicked');
+
+                    buttons.forEach(b => b.classList.remove('active'));
+
+                    // Add the 'active' class to the clicked button
+                    button.classList.add('active');
+
+                    const category = button.getAttribute('data-category');
+                    cards.forEach(card => {
+
+
+                        if (card.dataset.category === category) {
+                            //car.style.display = 'block';
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+
+            const butt = document.querySelectorAll('.set');
+            const card = document.querySelectorAll('.setting');
+            //const car = document.querySelectorAll('.stat');
+
+
+
+            butt.forEach(button => {
+                button.addEventListener('click', () => {
+                    //button.classList.add('clicked');
+
+                    //butt.forEach(b => b.classList.remove('active'));
+
+                    // Add the 'active' class to the clicked button
+                    //button.classList.add('active');
+
+                    const category = button.getAttribute('data-category');
+                    card.forEach(car => {
+
+
+                        if (car.dataset.category === category) {
+                            //car.style.display = 'block';
+                            car.style.display = 'block';
+                        } else {
+                            car.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+        </script>
+        <script>
+            const toggle = document.getElementById('chck');
+            const body = document.querySelector('.container');
+
+            toggle.addEventListener('change', function () {
+                if (toggle.checked) {
+                    //body.classList.add('dark-theme');
+                    body.classList.add('light-theme');
+                } else {
+                    body.classList.remove('light-theme');
+
+                    //body.classList.remove('dark-theme');
+                }
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                setInterval(updateDynamicValue, 1000);  // Update the value every 5 seconds
+
+                function updateDynamicValue() {
+                    $.ajax({
+                        url: '/get_dynamic_value/',  // URL to fetch the dynamic value from the server
+                        type: 'GET',
+                        success: function (response) {
+                            var formattedValue = parseFloat(response.dynamic_value).toFixed(3);
+                            $('#dynamic-value').text(formattedValue);  // Update the value in the div
+                        },
+                        error: function (xhr) {
+                            console.log(xhr);
+                        }
+                    });
+                }
+            });
+
+            $(document).ready(function () {
+                setInterval(Dynamiccoin, 1000);  // Update the value every 5 seconds
+
+                function Dynamiccoin() {
+                    $.ajax({
+                        url: '/get_Dynamiccoin/',  // URL to fetch the dynamic value from the server
+                        type: 'GET',
+                        success: function (response) {
+                            var formattedValue = parseFloat(response.dynamic_value).toFixed(3);
+                            var coinr = formattedValue.toString();
+                            $('#bitcoin_value').text(coinr + "BTC");  // Update the value in the div
+
+                            const forValue = parseFloat(response.data.Close);
+                            const inrbit = parseFloat(response.dynamic_value);
+
+
+                            console.log(forValue, inrbit);
+
+
+                            const calculatedAmount = (forValue * inrbit).toFixed(3);
+
+                            var coinvr = calculatedAmount.toString();
+                            // Set the calculated amount in the amountInput field
+                            //amountInput.value = calculatedAmount;
+                            $('#bitrs').text(coinvr + "RS");  // Update the value in the div
+
+                            var userbalance = parseFloat(response.balance).toFixed(5);
+                            $('#user_balance').text(userbalance);
+
+
+                        },
+                        error: function (xhr) {
+                            console.log(xhr);
+                        }
+                    });
+                }
+            });
+        </script>
+        <script>
+            // Function to update the chart with new data
+            function updateChart(data) {
+                var dates = data.map(obj => obj.Date);  // Replace 'dates' with the actual key for dates in the response
+                const closePrices = data.map(obj => obj.Close);  // Replace 'close_prices' with the actual key for close prices in the response
+                console.log(data);
+                // Get the chart instance or create a new chart
+                const chart = Chart.instances[0] || new Chart(document.getElementById('chart').getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Close Prices',
+                            data: closePrices,
+                            backgroundColor: 'rgb(36, 36, 36))',
+                            borderColor: 'rgba(164, 190, 58, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Close Price'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update the chart data and redraw
+                chart.data.labels = dates;
+                chart.data.datasets[0].data = closePrices;
+                chart.update();
+            }
+
+            // Function to fetch data from Django backend
+            function fetchData() {
+                $.ajax({
+                    url: '/data_endpoint/',  // Replace '/data_endpoint/' with your Django endpoint URL
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        updateChart(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+
+            // Initial fetch and update
+            fetchData();
+
+            // Fetch and update every 5 seconds
+            setInterval(fetchData, 5000);
+        </script>
+</body>
+
+</html>
